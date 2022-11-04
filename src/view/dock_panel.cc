@@ -727,26 +727,17 @@ void DockPanel::addTask(const TaskInfo& task) {
     }
   }
 
-  // Adds a new program.
-  auto app = model_->findApplication(task.command);
-  const QString& command = app ? app->taskCommand : task.command;
   int i = 0;
-  for (; i < itemCount() && items_[i]->beforeTask(command); ++i);
-  if (app) {
-    items_.insert(items_.begin() + i, std::make_unique<Program>(
-        this, model_, app->name, orientation_, app->icon, minSize_,
-        maxSize_, app->command, app->taskCommand, /*pinned=*/false));
-  } else {
-      if (task.icon.isNull()) {
-          items_.insert(items_.begin() + i, std::make_unique<Program>(
-                        this, model_, task.program, orientation_, "xapp", minSize_,
-                        maxSize_, task.command, task.command, /*pinned=*/false));
-      }
-      else {
-          items_.insert(items_.begin() + i, std::make_unique<Program>(
-                        this, model_, task.program, orientation_, task.icon, minSize_,
-                        maxSize_, task.command, task.command, /*pinned=*/false));
-      }
+  for (; i < itemCount() && items_[i]->beforeTask(task.command); ++i);
+  if (task.icon.isNull()) {
+      items_.insert(items_.begin() + i, std::make_unique<Program>(
+            this, model_, task.name, orientation_, "xapp", minSize_,
+            maxSize_, task.command, task.command, /*pinned=*/false));
+  }
+  else {
+      items_.insert(items_.begin() + i, std::make_unique<Program>(
+            this, model_, task.name, orientation_, task.icon, minSize_,
+            maxSize_, task.command, task.command, /*pinned=*/false));
   }
   items_[i]->addTask(task);
 }

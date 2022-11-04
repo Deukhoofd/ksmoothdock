@@ -87,11 +87,6 @@ class ApplicationMenuConfig : public QObject {
 
   const std::vector<Category>& categories() const { return categories_; }
 
-  const ApplicationEntry* findApplication(const std::string& command) const;
-  const ApplicationEntry* findApplication(const QString& command) const {
-    return findApplication(command.toStdString());
-  }
-
  signals:
   void configChanged();
 
@@ -102,23 +97,12 @@ class ApplicationMenuConfig : public QObject {
   // Initializes application categories.
   void initCategories();
 
-  // Loads application entries from entryDir.
-  bool loadEntries();
-
-  // Loads an application entry from the .desktop file.
-  bool loadEntry(const QString& file);
-
   // The directories that contains the list of all application entries as
   // desktop files, e.g. /usr/share/applications
   const QStringList entryDirs_;
 
   // Application entries, organized by categories.
   std::vector<Category> categories_;
-  // Map from category names to category indices in the above vector,
-  // to make loading entries faster.
-  std::unordered_map<std::string, int> categoryMap_;
-  // Map from commands to application entries for fast look-up.
-  std::unordered_map<std::string, const ApplicationEntry*> entries_;
 
   QFileSystemWatcher fileWatcher_;
 

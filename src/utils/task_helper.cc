@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <regex>
 #include <utility>
 
@@ -150,11 +151,11 @@ bool TaskHelper::isValidTask(WId wId, int screen, bool currentDesktopOnly,
 
 TaskInfo TaskHelper::getTaskInfo(WId wId) const {
   static constexpr int kIconLoadSize = 128;
-  KWindowInfo info(wId, NET::WMVisibleName | NET::WMState, NET::WM2WindowClass);
+  KWindowInfo info(wId, NET::WMVisibleIconName | NET::WMState, NET::WM2WindowClass);
 
   const auto program = getProgram(info);
   const auto command = getCommand(info);
-  const auto name = info.visibleName();
+  const auto name = info.visibleIconName();
   QPixmap icon = KWindowSystem::icon(wId, kIconLoadSize, kIconLoadSize, true /* scale */);
 
   return TaskInfo(wId, program, command, name, icon, info.state() == NET::DemandsAttention);

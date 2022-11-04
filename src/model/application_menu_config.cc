@@ -90,7 +90,6 @@ ApplicationMenuConfig::ApplicationMenuConfig(const QStringList& entryDirs)
     : entryDirs_(entryDirs),
       fileWatcher_(entryDirs) {
   initCategories();
-  loadEntries();
   connect(&fileWatcher_, SIGNAL(directoryChanged(const QString&)),
           this, SLOT(reload()));
   connect(&fileWatcher_, SIGNAL(fileChanged(const QString&)),
@@ -120,85 +119,15 @@ void ApplicationMenuConfig::initCategories() {
   for (int i = 0; i < kNumCategories; ++i) {
     categories_.push_back(Category(
         kCategories[i][0], kCategories[i][1], kCategories[i][2]));
-    categoryMap_[kCategories[i][0]] = i;
   }
 }
 
-bool ApplicationMenuConfig::loadEntries() {
-  for (const QString& entryDir : entryDirs_) {
-    if (!QDir::root().exists(entryDir)) {
-      continue;
-    }
-
-    QDir dir(entryDir);
-    QStringList files = dir.entryList({"*.desktop"}, QDir::Files, QDir::Name);
-    if (files.isEmpty()) {
-      continue;
-    }
-
-    for (int i = 0; i < files.size(); ++i) {
-      const QString& file = entryDir + "/" + files.at(i);
-      loadEntry(file);
-    }
-  }
-
-  return true;
-}
-
-bool ApplicationMenuConfig::loadEntry(const QString &file) {
-  KDesktopFile desktopFile(file);
-  if (desktopFile.noDisplay()) {
-    return false;
-  }
-
-  if (desktopFile.entryMap("Desktop Entry").contains("Hidden")) {
-    const QString hidden = desktopFile.entryMap("Desktop Entry")["Hidden"];
-    if (hidden.trimmed().toLower() == "true") {
-      return false;
-    }
-  }
-
-  const QStringList categories =
-      desktopFile.entryMap("Desktop Entry")["Categories"]
-          .split(';', Qt::SkipEmptyParts);
-  if (categories.isEmpty()) {
-    return false;
-  }
-
-  for (int i = 0; i < categories.size(); ++i) {
-    const std::string category = categories[i].toStdString();
-    if (categoryMap_.count(category) > 0) {
-      const QString command = filterFieldCodes(
-          desktopFile.entryMap("Desktop Entry")["Exec"]);
-      ApplicationEntry newEntry(desktopFile.readName(),
-                                desktopFile.readGenericName(),
-                                desktopFile.readIcon(),
-                                command,
-                                file);
-      auto& entries = categories_[categoryMap_[category]].entries;
-      auto next = std::lower_bound(entries.begin(), entries.end(), newEntry);
-      entries.insert(next, newEntry);
-
-      entries_[newEntry.taskCommand.toStdString()] = &(*--next);
-    }
-  }
-  return true;
-}
 
 void ApplicationMenuConfig::reload() {
   for (auto& category : categories_) {
     category.entries.clear();
   }
-  loadEntries();
   emit configChanged();
-}
-
-const ApplicationEntry* ApplicationMenuConfig::findApplication(
-    const std::string& command) const {
-  if (command == "systemsettings") {  // Fix for System Settings.
-    return (entries_.count("systemsettings5") > 0) ? entries_.at("systemsettings5") : nullptr;
-  }
-  return (entries_.count(command) > 0) ? entries_.at(command) : nullptr;
 }
 
 }  // namespace ksmoothdock

@@ -416,10 +416,6 @@ class MultiDockModel : public QObject {
     return applicationMenuConfig_.categories();
   }
 
-  const ApplicationEntry* findApplication(const QString& command) const {
-    return applicationMenuConfig_.findApplication(command);
-  }
-
  signals:
   // Minor appearance changes that require view update (repaint).
   void appearanceOutdated();
