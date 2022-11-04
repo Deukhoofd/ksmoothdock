@@ -90,10 +90,6 @@ add_executable(dock_panel_test view/dock_panel_test.cc)
 target_link_libraries(dock_panel_test Qt5::Test ksmoothdock_lib ${LIBS})
 add_test(dock_panel_test dock_panel_test)
 
-add_executable(application_menu_config_test model/application_menu_config_test.cc)
-target_link_libraries(application_menu_config_test Qt5::Test ksmoothdock_lib ${LIBS})
-add_test(application_menu_config_test application_menu_config_test)
-
 add_executable(add_panel_dialog_test view/add_panel_dialog_test.cc)
 target_link_libraries(add_panel_dialog_test Qt5::Test ksmoothdock_lib ${LIBS})
 add_test(add_panel_dialog_test add_panel_dialog_test)
