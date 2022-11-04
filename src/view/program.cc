@@ -76,10 +76,10 @@ Program::Program(DockPanel* parent, MultiDockModel* model, const QString& label,
 
 void Program::draw(QPainter *painter) const {
   if ((!tasks_.empty() && active()) || attentionStrong_) {
-    drawHighlightedIcon(model_->backgroundColor(), left_, top_, getWidth(), getHeight(),
+    drawHighlightedIcon(QColor::fromRgb(0,0,0, 210) , left_, top_, getWidth(), getHeight(),
                         5, size_ / 8, painter);
   } else if (!tasks_.empty()) {
-    drawHighlightedIcon(model_->backgroundColor(), left_, top_, getWidth(), getHeight(),
+    drawHighlightedIcon(QColor::fromRgb(0,0,0, 210), left_, top_, getWidth(), getHeight(),
                         5, size_ / 8, painter, 0.25);
   }
   IconBasedDockItem::draw(painter);

@@ -20,6 +20,8 @@
 #define KSMOOTHDOCK_MULTI_DOCK_MODEL_H_
 
 #include <memory>
+#include <qcolor.h>
+#include <qnamespace.h>
 #include <unordered_map>
 #include <utility>
 #include <vector>

@@ -22,6 +22,9 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <qfont.h>
+#include <qfontdatabase.h>
+#include <qnamespace.h>
 #include <utility>
 
 #include <QColor>
@@ -776,10 +779,13 @@ void DockPanel::initLayoutVars() {
   numAnimationSteps_ = 20;
   animationSpeed_ = 16;
 
-  tooltip_.setFontSize(tooltipFontSize_);
-  tooltip_.setFontBold(true);
+  QFont font;
+  font.setFamily(font.defaultFamily());
+  tooltip_.setFont(font);
+  tooltip_.setFontSize(14);
   tooltip_.setFontColor(Qt::white);
-  tooltip_.setBackgroundColor(Qt::black);
+  tooltip_.setBackgroundColor(Qt::transparent);
+
 
   const int distance = minSize_ + itemSpacing_;
   // The difference between minWidth_ and maxWidth_
@@ -1201,7 +1207,7 @@ void DockPanel::showTooltip(int i) {
     x = geometry().x() + items_[i]->left_
         - tooltip_.width() / 2 + items_[i]->getWidth() / 2;
     // No need for additional tooltip spacing in this position.
-    y = geometry().y() - tooltip_.height();
+    y = geometry().y() - tooltip_.height() + 12;
   } else if (position_ == PanelPosition::Left) {
     x = geometry().x() + maxWidth_ + kTooltipSpacing;
     y = geometry().y() + items_[i]->top_

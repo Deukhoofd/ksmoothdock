@@ -25,6 +25,7 @@
 #include <KWindowSystem>
 #include <netwm_def.h>
 
+#include <qcolor.h>
 #include <utils/draw_utils.h>
 
 namespace ksmoothdock {
@@ -77,6 +78,17 @@ void Tooltip::updateLayout() {
 
 void Tooltip::paintEvent(QPaintEvent* e) {
   QPainter painter(this);
+
+  painter.setRenderHint(QPainter::Antialiasing); // smooth borders
+  painter.setBrush(QBrush(QColor::fromRgb(0, 0, 0, 200))); // visible color of background
+  painter.setPen(Qt::transparent); // thin border color
+
+  // Change border radius
+  QRect rect = this->rect();
+  rect.setWidth(rect.width()-1);
+  rect.setHeight(rect.height()-16);
+  painter.drawRoundedRect (rect, 8, 8);
+
   painter.setRenderHint(QPainter::TextAntialiasing);
   QFontMetrics metrics(font_);
   const int kDeltaY = metrics.height() / 2;
