@@ -1222,9 +1222,12 @@ void DockPanel::showWaitCursor() {
   QTimer::singleShot(1000 /* msecs */, this, SLOT(resetCursor()));
 }
 
-int DockPanel::parabolic(int x) {
+int DockPanel::parabolic(int x) const {
   // Assume x >= 0.
-  if (x > parabolicMaxX_) {
+  if (x > 30) {
+      x *= 2.2;
+  }
+  if (x >= parabolicMaxX_) {
     return minSize_;
   } else {
     return maxSize_ -

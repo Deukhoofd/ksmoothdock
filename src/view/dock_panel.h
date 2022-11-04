@@ -253,7 +253,7 @@ class DockPanel : public QWidget {
   void showTooltip(int i);
 
   // Returns the size given the distance to the mouse.
-  int parabolic(int x);
+  int parabolic(int x) const;
 
   MultiDockView* parent_;
 
