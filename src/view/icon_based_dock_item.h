@@ -19,6 +19,7 @@
 #ifndef KSMOOTHDOCK_ICON_BASED_DOCK_ITEM_H_
 #define KSMOOTHDOCK_ICON_BASED_DOCK_ITEM_H_
 
+#include <qicon.h>
 #include <qimage.h>
 #include <vector>
 
@@ -41,11 +42,11 @@ class IconBasedDockItem : public DockItem {
   virtual ~IconBasedDockItem() {}
 
   int getWidthForSize(int size) const override {
-    return getIcon(size).width();
+    return size_;
   }
 
   int getHeightForSize(int size) const override {
-    return getIcon(size).height();
+      return size_;
   }
 
   void draw(QPainter* painter) const override;
@@ -53,11 +54,11 @@ class IconBasedDockItem : public DockItem {
   // Sets the icon on the fly.
   void setIcon(const QPixmap& icon);
   void setIconName(const QString& iconName);
-  const QPixmap& getIcon(int size) const;
+  const QIcon& getIcon(int size) const;
   QString getIconName() const { return iconName_; }
 
  protected:
-  std::vector<QPixmap> icons_;
+  QIcon icon;
 
   QString iconName_;
   QImage originalImage;

@@ -159,7 +159,6 @@ bool Program::updateTask(const TaskInfo& task) {
   }
 
   if (task.icon.toImage() != originalImage) {
-      std::cout << "Updating icon "<< std::endl;
       this->setIcon(task.icon);
   }
 
@@ -206,7 +205,7 @@ void Program::launch() {
 void Program::pinUnpin() {
   pinned_ = !pinned_;
   if (pinned_) {
-    model_->addLauncher(parent_->dockId(), LauncherConfig(label_, iconName_, command_));
+    model_->addLauncher(parent_->dockId(), LauncherConfig(label_, iconName_, icon, command_));
   } else {  // !pinned
     model_->removeLauncher(parent_->dockId(), command_);
     if (shouldBeRemoved()) {

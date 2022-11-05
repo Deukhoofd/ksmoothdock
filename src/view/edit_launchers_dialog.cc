@@ -316,7 +316,7 @@ void EditLaunchersDialog::saveData() {
     auto* listItem = launchers_->item(i);
     auto info = listItem->data(Qt::UserRole).value<LauncherInfo>();
     launcherConfigs.push_back(LauncherConfig(
-                                listItem->text(), info.iconName, info.command));
+                                listItem->text(), info.iconName, QIcon(), info.command));
   }
   model_->setDockLauncherConfigs(dockId_, launcherConfigs);
   model_->saveDockLauncherConfigs(dockId_);

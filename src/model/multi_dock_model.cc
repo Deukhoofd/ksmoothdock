@@ -23,6 +23,7 @@
 #include <KDesktopFile>
 #include <KWindowSystem>
 
+#include <qicon.h>
 #include <utils/command_utils.h>
 
 namespace ksmoothdock {
@@ -70,7 +71,12 @@ void LauncherConfig::saveToFile(const QString &filePath) const {
   KConfig config(filePath, KConfig::SimpleConfig);
   KConfigGroup group(&config, "Desktop Entry");
   group.writeEntry("Name", name);
-  group.writeEntry("Icon", icon);
+  if (!iconData.isNull()) {
+      this->iconData.pixmap(128,128).save(filePath + "_" + "icon.ico");
+      group.writeEntry("Icon", filePath + "_" + "icon.ico");
+  } else {
+      group.writeEntry("Icon", icon);
+  }
   group.writeEntry("Exec", command);
   group.writeEntry("Type", "Application");
   group.writeEntry("Terminal", false);
@@ -246,7 +252,7 @@ std::vector<LauncherConfig> MultiDockModel::createDefaultLaunchers() {
   launchers.reserve(kNumItems);
   for (int i = 0; i < kNumItems; ++i) {
     launchers.push_back(
-        LauncherConfig(kItems[i][0], kItems[i][1], kItems[i][2]));
+        LauncherConfig(kItems[i][0], kItems[i][1], QIcon(), kItems[i][2]));
   }
 
   return launchers;

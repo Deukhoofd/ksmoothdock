@@ -135,7 +135,7 @@ class DockItem {
   int getWidth() const {
     return getWidthForSize(size_);
   }
-  
+
   int getHeight() const {
     return getHeightForSize(size_);
   }

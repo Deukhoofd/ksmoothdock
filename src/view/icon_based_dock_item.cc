@@ -21,6 +21,7 @@
 #include <KIconLoader>
 
 #include <QImage>
+#include <qicon.h>
 
 namespace ksmoothdock {
 
@@ -28,54 +29,40 @@ const int IconBasedDockItem::kIconLoadSize;
 
 IconBasedDockItem::IconBasedDockItem(DockPanel* parent, const QString& label, Qt::Orientation orientation,
                   const QString& iconName, int minSize, int maxSize)
-    : DockItem(parent, label, orientation, minSize, maxSize),
-    icons_(maxSize - minSize + 1) {
+    : DockItem(parent, label, orientation, minSize, maxSize){
   setIconName(iconName);
 }
 
 IconBasedDockItem::IconBasedDockItem(DockPanel* parent, const QString& label,
     Qt::Orientation orientation, const QPixmap& icon,
     int minSize, int maxSize)
-    : DockItem(parent, label, orientation, minSize, maxSize),
-    icons_(maxSize - minSize + 1) {
+    : DockItem(parent, label, orientation, minSize, maxSize) {
   setIcon(icon);
 }
 
 void IconBasedDockItem::draw(QPainter* painter) const {
-  painter->drawPixmap(left_, top_, icons_[size_ - minSize_]);
+    icon.paint(painter, left_, top_, size_, size_);
 }
 
-void IconBasedDockItem::setIcon(const QPixmap& icon) {
-  generateIcons(icon);
-  originalImage = icon.toImage();
+void IconBasedDockItem::setIcon(const QPixmap& pixmap) {
+  generateIcons(pixmap);
 }
 
 void IconBasedDockItem::setIconName(const QString& iconName) {
   if (!iconName.isEmpty()) {
     iconName_ = iconName;
-    QPixmap icon = KIconLoader::global()->loadIcon(iconName,
+    QPixmap pixmap = KIconLoader::global()->loadIcon(iconName,
         KIconLoader::NoGroup, kIconLoadSize);
-    setIcon(icon);
+    setIcon(pixmap);
   }
 }
 
-const QPixmap& IconBasedDockItem::getIcon(int size) const {
-  if (size < minSize_) {
-    size = minSize_;
-  } else if (size > maxSize_) {
-    size = maxSize_;
-  }
-  return icons_[size - minSize_];
+const QIcon& IconBasedDockItem::getIcon(int size) const {
+  return icon;
 }
 
-void IconBasedDockItem::generateIcons(const QPixmap& icon) {
-  QImage image = icon.toImage(); // Convert to QImage for fast scaling.
-  for (int size = minSize_; size <= maxSize_; ++size) {
-    icons_[size - minSize_] = QPixmap::fromImage(
-        (orientation_ == Qt::Horizontal)
-            ? image.scaledToHeight(size, Qt::SmoothTransformation)
-            : image.scaledToWidth(size, Qt::SmoothTransformation));
-  }
+void IconBasedDockItem::generateIcons(const QPixmap& pixmap) {
+    icon = QIcon(pixmap);
 }
 
 }  // namespace ksmoothdock

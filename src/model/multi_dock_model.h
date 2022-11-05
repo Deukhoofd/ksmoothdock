@@ -21,7 +21,9 @@
 
 #include <memory>
 #include <qcolor.h>
+#include <qicon.h>
 #include <qnamespace.h>
+#include <qpixmap.h>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -77,13 +79,14 @@ constexpr float kDefaultClockFontScaleFactor = kLargeClockFontScaleFactor;
 struct LauncherConfig {
   QString name;
   QString icon;
+  QIcon iconData;
   QString command;
   QString taskCommand;
 
   LauncherConfig() = default;
-  LauncherConfig(const QString& name2, const QString& icon2,
+  LauncherConfig(const QString& name2, const QString& icon2, const QIcon iconData,
                  const QString& command2)
-      : name(name2), icon(icon2), command(command2),
+      : name(name2), icon(icon2), iconData(iconData), command(command2),
         taskCommand(getTaskCommand(command)) {}
   LauncherConfig(const QString& desktopFile);
 
