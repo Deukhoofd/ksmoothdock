@@ -32,6 +32,7 @@ class Tooltip : public QWidget {
  public:
   Tooltip();
 
+  [[nodiscard]] const QString& getText() const{ return this->text_; }
   void setText(const QString& text);
   void setFontFace(const QString& fontFace);
   void setFontItalic(bool val);

@@ -372,6 +372,7 @@ void DockPanel::onWindowChanged(WId wId, NET::Properties properties,
   if (wId != winId() && wId != tooltip_.winId() &&
       taskHelper_.isValidTask(wId)) {
     auto screen = model_->currentScreenTasksOnly() ? screen_ : -1;
+
     if (properties & NET::WMDesktop || properties & NET::WMGeometry) {
       if (taskHelper_.isValidTask(wId, screen, model_->currentDesktopTasksOnly())) {
         addTask(wId);
@@ -379,7 +380,8 @@ void DockPanel::onWindowChanged(WId wId, NET::Properties properties,
       } else {
         removeTask(wId);
       }
-    } else if (properties & NET::WMState) {
+    } else if ((properties & NET::WMState) || (properties & NET::WMName) || (properties & NET::WMIconName) ||
+               (properties & NET::WMVisibleName) || (properties & NET::WMVisibleIconName)) {
       updateTask(wId);
     }
   }

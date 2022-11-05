@@ -47,6 +47,7 @@ void IconBasedDockItem::draw(QPainter* painter) const {
 
 void IconBasedDockItem::setIcon(const QPixmap& icon) {
   generateIcons(icon);
+  originalImage = icon.toImage();
 }
 
 void IconBasedDockItem::setIconName(const QString& iconName) {

@@ -19,6 +19,7 @@
 #ifndef KSMOOTHDOCK_ICON_BASED_DOCK_ITEM_H_
 #define KSMOOTHDOCK_ICON_BASED_DOCK_ITEM_H_
 
+#include <qimage.h>
 #include <vector>
 
 #include <QPainter>
@@ -59,6 +60,7 @@ class IconBasedDockItem : public DockItem {
   std::vector<QPixmap> icons_;
 
   QString iconName_;
+  QImage originalImage;
 
  private:
   static const int kIconLoadSize = 128;

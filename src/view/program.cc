@@ -30,6 +30,7 @@
 #include <KWindowSystem>
 
 #include "dock_panel.h"
+#include <qcursor.h>
 #include <utils/command_utils.h>
 #include <utils/draw_utils.h>
 
@@ -144,8 +145,22 @@ bool Program::addTask(const TaskInfo& task) {
 }
 
 bool Program::updateTask(const TaskInfo& task) {
+
   if (!areTheSameCommand(taskCommand_, task.command)) {
     return false;
+  }
+
+  bool changed = false;
+  if (this->parent_->tooltip_.getText().toStdString() == this->label_.toStdString())
+  {
+      this->parent_->tooltip_.setText(task.name);
+      this->setLabel(task.name);
+      changed = true;
+  }
+
+  if (task.icon.toImage() != originalImage) {
+      std::cout << "Updating icon "<< std::endl;
+      this->setIcon(task.icon);
   }
 
   for (auto& existingTask : tasks_) {
@@ -156,7 +171,7 @@ bool Program::updateTask(const TaskInfo& task) {
     }
   }
 
-  return false;
+  return changed;
 }
 
 bool Program::removeTask(WId wId) {
